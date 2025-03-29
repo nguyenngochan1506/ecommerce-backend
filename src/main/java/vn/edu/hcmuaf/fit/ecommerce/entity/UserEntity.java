@@ -1,10 +1,7 @@
 package vn.edu.hcmuaf.fit.ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import vn.edu.hcmuaf.fit.ecommerce.common.Gender;
 import vn.edu.hcmuaf.fit.ecommerce.common.UserStatus;
 
@@ -16,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class UserEntity extends BaseEntity {
 
     @Column(name = "username",unique = true, nullable = false, length = 255)
