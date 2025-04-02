@@ -16,9 +16,6 @@ public class UpdateUserRequest implements Serializable {
     @NotNull(message = "id must be not null")
     private Long id;
 
-    @NotBlank(message = "username must be not blank")
-    private String username;
-
     @NotBlank(message = "fullName must be not blank")
     private String fullName;
 

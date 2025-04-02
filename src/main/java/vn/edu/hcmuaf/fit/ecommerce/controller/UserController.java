@@ -1,17 +1,15 @@
 package vn.edu.hcmuaf.fit.ecommerce.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.ecommerce.dto.SuccessResponseDto;
 import vn.edu.hcmuaf.fit.ecommerce.dto.req.CreateUserRequest;
 import vn.edu.hcmuaf.fit.ecommerce.dto.req.UpdateUserRequest;
-import vn.edu.hcmuaf.fit.ecommerce.dto.res.UserResponse;
 import vn.edu.hcmuaf.fit.ecommerce.service.UserService;
 
-import java.util.List;
 
 
 @RestController
@@ -34,13 +32,17 @@ public class UserController {
     }
 
     @PostMapping
-    public long createUser(@Valid @RequestBody CreateUserRequest req) {
-        userService.createUser(req);
-        return 0;
+    public SuccessResponseDto createUser(@Valid @RequestBody CreateUserRequest req) {
+
+        return SuccessResponseDto.builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Create user successfully")
+                .data(userService.createUser(req))
+                .build();
     }
 
     @GetMapping("/{id}")
-    public SuccessResponseDto getUserById(@PathVariable Long id) {
+    public SuccessResponseDto getUserById(@Min(value = 1, message = "id must be greater than 0") @PathVariable Long id) {
 
         return SuccessResponseDto.builder()
                 .status(HttpStatus.OK.value())
@@ -50,16 +52,20 @@ public class UserController {
     }
 
     @PutMapping()
-    public void updateUserById(@Valid @RequestBody UpdateUserRequest req) {
-         userService.updateById(req);
+    public SuccessResponseDto updateUserById(@Valid @RequestBody UpdateUserRequest req) {
+         return SuccessResponseDto.builder()
+                 .status(HttpStatus.ACCEPTED.value())
+                 .message("Update user successfully")
+                 .data(userService.updateById(req))
+                 .build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable Long id) {
-        try {
-            userService.deleteUserById(id);
-        } catch (BadRequestException e) {
-            throw new RuntimeException(e);
-        }
+    public SuccessResponseDto deleteUserById(@PathVariable Long id) {
+            return SuccessResponseDto.builder()
+                    .status(HttpStatus.ACCEPTED.value())
+                    .message("Delete user successfully")
+                    .data(userService.deleteUserById(id))
+                    .build();
     }
 }
