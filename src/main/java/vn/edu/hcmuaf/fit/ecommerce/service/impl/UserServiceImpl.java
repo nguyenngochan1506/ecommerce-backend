@@ -16,6 +16,7 @@ import vn.edu.hcmuaf.fit.ecommerce.dto.req.UpdateUserRequest;
 import vn.edu.hcmuaf.fit.ecommerce.dto.res.UserPageResponse;
 import vn.edu.hcmuaf.fit.ecommerce.dto.res.UserResponse;
 import vn.edu.hcmuaf.fit.ecommerce.entity.UserEntity;
+import vn.edu.hcmuaf.fit.ecommerce.exception.ResourceNotFoundException;
 import vn.edu.hcmuaf.fit.ecommerce.repository.UserRepository;
 import vn.edu.hcmuaf.fit.ecommerce.service.UserService;
 
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUserById(long id) {
-        UserEntity userEntity = userRepository.findById(id).orElse(null);
+        UserEntity userEntity = this.findById(id);
         return UserResponse.builder()
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
@@ -66,19 +67,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long deleteUserById(Long id)  {
-       try {
            UserEntity user = this.findById(id);
            user.setStatus(UserStatus.DELETED);
            return userRepository.save(user).getId();
-       }catch (Exception e) {
-           e.printStackTrace();
-           return 0L;
-       }
     }
 
     @Override
     public long updateById(UpdateUserRequest req) {
-        try {
             UserEntity entity = this.findById(req.getId());
 
             entity.setStatus(req.getStatus());
@@ -91,10 +86,6 @@ public class UserServiceImpl implements UserService {
             entity.setGender(req.getGender());
             return userRepository.save(entity).getId();
 
-        }catch (Exception e) {
-            e.printStackTrace();
-            return 0L;
-        }
     }
 
     @Override
@@ -153,7 +144,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserEntity findById(long id) throws BadRequestException {
-        return userRepository.findById(id).orElseThrow(()-> new BadRequestException("User not found!") );
+    private UserEntity findById(long id)  {
+        return userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found!") );
     }
 }

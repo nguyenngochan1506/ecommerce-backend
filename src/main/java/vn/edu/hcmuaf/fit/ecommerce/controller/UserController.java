@@ -1,17 +1,15 @@
 package vn.edu.hcmuaf.fit.ecommerce.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.ecommerce.dto.SuccessResponseDto;
 import vn.edu.hcmuaf.fit.ecommerce.dto.req.CreateUserRequest;
 import vn.edu.hcmuaf.fit.ecommerce.dto.req.UpdateUserRequest;
-import vn.edu.hcmuaf.fit.ecommerce.dto.res.UserResponse;
 import vn.edu.hcmuaf.fit.ecommerce.service.UserService;
 
-import java.util.List;
 
 
 @RestController
@@ -44,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public SuccessResponseDto getUserById(@PathVariable Long id) {
+    public SuccessResponseDto getUserById(@Min(value = 1, message = "id must be greater than 0") @PathVariable Long id) {
 
         return SuccessResponseDto.builder()
                 .status(HttpStatus.OK.value())
