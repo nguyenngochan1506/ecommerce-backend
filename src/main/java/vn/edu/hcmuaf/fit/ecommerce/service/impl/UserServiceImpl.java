@@ -65,15 +65,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) throws BadRequestException {
-        UserEntity user = this.findById(id);
-        user.setStatus(UserStatus.DELETED);
-
-        userRepository.save(user);
+    public long deleteUserById(Long id)  {
+       try {
+           UserEntity user = this.findById(id);
+           user.setStatus(UserStatus.DELETED);
+           return userRepository.save(user).getId();
+       }catch (Exception e) {
+           e.printStackTrace();
+           return 0L;
+       }
     }
 
     @Override
-    public void updateById(UpdateUserRequest req) {
+    public long updateById(UpdateUserRequest req) {
         try {
             UserEntity entity = this.findById(req.getId());
 
@@ -85,12 +89,12 @@ public class UserServiceImpl implements UserService {
             entity.setEmail(req.getEmail());
             entity.setDateOfBirth(req.getDateOfBirth());
             entity.setGender(req.getGender());
-            userRepository.save(entity);
+            return userRepository.save(entity).getId();
 
         }catch (Exception e) {
             e.printStackTrace();
+            return 0L;
         }
-
     }
 
     @Override

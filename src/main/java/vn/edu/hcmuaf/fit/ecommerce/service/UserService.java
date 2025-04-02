@@ -13,9 +13,9 @@ public interface UserService {
     long createUser(CreateUserRequest req);
     UserResponse getUserById(long id);
 
-    void deleteUserById(Long id) throws BadRequestException;
+    long deleteUserById(Long id);
 
-    void updateById(UpdateUserRequest req);
+    long updateById(UpdateUserRequest req);
 
     UserPageResponse getListUser(int pageNo, int pageSize, String sortBy);
 }
